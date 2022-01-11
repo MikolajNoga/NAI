@@ -32,7 +32,7 @@ auto hill_climb = [](auto f1, double x, double y, int iteration) {
         double new_y = y + shift(gen);
 
         double possible_best_y = f1(new_x, new_y);
-        if (possible_best_y < max_y) {
+        if (possible_best_y < max_y && new_x < 10.0 && new_x > -10.0) {
             max_y = possible_best_y;
             x = new_x;
             y = new_y;
@@ -60,13 +60,13 @@ int main() {
     if (choice == 1) {
         auto [levi_x, levi_y] = make_pair(leviDomain(gen), leviDomain(gen));
         auto [result_x, result_y] = hill_climb(leviFunction, levi_x, levi_y, iteration);
-        cout << "Best points:" << endl;
-        cout << result_x << " : " << result_y << endl;
+        cout << "Best point:" << endl;
+        cout << "( " << result_x << " , " << result_y << " )" << endl;
     } else if (choice == 2) {
         auto [matyas_x, matyas_y] = make_pair(matyasDomain(gen), matyasDomain(gen));
         auto [result_x, result_y] = hill_climb(matyasFunction, matyas_x, matyas_y, iteration);
-        cout << "Best points:" << endl;
-        cout << result_x << " : " << result_y << endl;
+        cout << "Best point:" << endl;
+        cout << "( " << result_x << " , " << result_y << " )" << endl;
     }
     return 0;
 }

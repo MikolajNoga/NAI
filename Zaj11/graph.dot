@@ -1,0 +1,19 @@
+digraph path_graph {
+ 	rankdir=LR; 
+	node [shape = circle];
+	6 [shape=Mdiamond];
+	5 [shape=Msquare];	1 -> 2 [ label = "9" ];
+	2 -> 3 [ label = "5" ];
+	3 -> 4 [ label = "4" ];
+	4 -> 5 [ label = "7" ];
+	5 -> 6 [ label = "11" ];
+	6 -> 7 [ label = "3" ];
+	7 -> 8 [ label = "7" ];
+	4 -> 1 [ label = "11" ];
+	1 -> 7 [ label = "8" ];
+	7 -> 1 [ label = "3" ];
+	5 -> 8 [ label = "5" ];
+	3 -> 1 [ label = "4" ];
+	3 -> 2 [ label = "9" ];
+	4 -> 1 [ label = "2" ];
+}
