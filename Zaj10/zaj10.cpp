@@ -11,8 +11,8 @@ std::mt19937 gen(rd());
 std::uniform_int_distribution<> distr(1, 12);
 std::uniform_int_distribution<> distrNodes(1, 8);
 
-void writeToFile(string str) {
-    ofstream file(R"(C:\Users\nogam\CLionProjects\NAI\Zaj10\graph.dot)");
+void writeToFile(string str, string path) {
+    ofstream file(path);
 
     if (!file.is_open()) {
         cerr << "Error: file could not be opened" << endl;
@@ -26,7 +26,9 @@ void writeToFile(string str) {
 string getDotStr(){
     string str = "digraph path_graph {\n "
                 "\trankdir=LR; \n"
-                "\tnode [shape = circle];\n";
+                "\tnode [shape = circle];\n"
+                "\t" + to_string(distrNodes(gen)) + " [shape=Mdiamond];\n"
+                "\t" + to_string(distrNodes(gen)) + " [shape=Msquare];\n";
     for (int i = 1; i < 8; i++) {
         str += "\t" + to_string(i) + " -> " + to_string(i+1) + " [ label = \"" + to_string(distr(gen)) + "\" ];\n";
     }
@@ -39,8 +41,16 @@ string getDotStr(){
 
 
 
-int main() {
-    writeToFile(getDotStr());
-    system(R"(dot C:\Users\nogam\CLionProjects\NAI\Zaj10\graph.dot -Tpng -o C:\Users\nogam\CLionProjects\NAI\Zaj10\image.png)");
+int main(int argc, char* argv[]) {
+    string pathToFile = argv[1];
+    string pathToPng = argv[2];
+
+
+    writeToFile(getDotStr(), pathToFile);
+
+    string dotToPngCommand = "dot " + pathToFile + " -Tpng -o " + pathToPng;
+    const char *command = dotToPngCommand.c_str();
+    system(command);
+
     return 0;
 }
