@@ -137,10 +137,12 @@ int main(int argc, char** argv){
         point2d dp = derivative(field, currentPosition);
         dp = dp * (1.0 / length(dp));
         dp = dp * acceleration;
+        dp = dp * velocity;
 
-        currentVelocity = currentVelocity - dp;
+          currentVelocity = currentVelocity - dp;
         if (length(currentVelocity) > velocity) currentVelocity = (currentVelocity * (1.0 / (length(currentVelocity))))*velocity;
         currentPosition = currentPosition + currentVelocity;
+        currentPosition = currentPosition - dp;
         std::cout << currentPosition << std::endl;
     }
     return 0;
