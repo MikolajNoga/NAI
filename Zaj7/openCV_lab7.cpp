@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
 
         if (waitKey(1) == 'x') {
             Mat frameROI;
-            frameROI = frame.clone();
+            frameROI = hsvRange.clone();
             auto roi = selectROI("Use ROI on this window", frameROI);
             Mat roiField = frameROI(roi);
             imshow("ROI", roiField);
