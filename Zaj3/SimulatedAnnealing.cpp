@@ -3,12 +3,17 @@
 #include <vector>
 #include <random>
 #include <functional>
+#include <fstream>
+#include <string>
+
 using namespace std;
 
 #define M_PI 3.1415926535
 
 random_device rd;
 mt19937 gen(rd());
+
+string str = "";
 
 ostream& operator << (ostream& o, vector<double>v) {
     for (auto e : v) {
@@ -39,7 +44,7 @@ vector<double> simulated_annealing(function<double(vector<double>)> f, function<
         if (f(currentPoint) < f(best)) {
             best = currentPoint;
         }
-        cout << (i + 1) << " " << f(currentPoint) <<endl;
+        str += to_string((i + 1)) + " " + to_string(f(currentPoint)) + "\n";
     }
     return best;
 }
@@ -60,7 +65,7 @@ vector<double> hillClimbing(function<double(vector<double>)> f, function<bool(ve
                 p = p2;
             }
         }
-        cout << (i + 1) << " " << f(p) <<endl;
+        str += to_string((i + 1)) + " " + to_string(f(p)) + "\n";
     }
     return p;
 }
@@ -86,13 +91,28 @@ auto functionDomain = [](vector<double> v) {
     return (abs(v[0]) <= 10) && (abs(v[1]) <= 10);
 };
 
-int main() {
+void writeToFile(string str, string path) {
+    ofstream file(path);
+
+    if (!file.is_open()) {
+        cerr << "Error: file could not be opened" << endl;
+        exit(1);
+    }
+    file << str;
+
+    file.close();
+}
+
+int main(int argc, char* argv[]) {
     using namespace std;
     vector <double> numbers;
     int functionChoice, iterations, algorithmChoice;
     cout << "Choose function: (1)Levi, (2)Matyas\n";
     cin >> functionChoice;
     vector <double> shift{ -0.1 , 0.1 };
+    string path = "";
+    if (argc > 1)
+        path = argv[1];
 
     if (functionChoice == 1) {
         uniform_real_distribution<> distrib_r(-10, 10);
@@ -103,6 +123,8 @@ int main() {
         cin >> iterations;
         if (algorithmChoice == 1) {
             auto result = hillClimbing(leviFunction, functionDomain, leviP0, shift, iterations);
+            if (argc > 1)
+                writeToFile(str,path);
             cout << result << " : " << leviFunction(result) << endl;
         }
         else if (algorithmChoice == 2) {
@@ -113,6 +135,8 @@ int main() {
                 }
                 return p;
                 },[](int k) { return 1000.0 / k; });
+            if (argc > 1)
+                writeToFile(str,path);
             cout << result << " : " << leviFunction(result) << endl;
         }
 
@@ -126,6 +150,8 @@ int main() {
         cin >> iterations;
         if (algorithmChoice == 1) {
             auto result = hillClimbing(matyasFunction, functionDomain, matyasP0, shift, iterations);
+            if (argc > 1)
+                writeToFile(str,path);
             cout << result << " : " << matyasFunction(result) << endl;
         }
         else if (algorithmChoice == 2) {
@@ -136,6 +162,8 @@ int main() {
                 }
                 return p;
                 },[](int k) { return 1000.0 / k; });
+            if (argc > 1)
+                writeToFile(str,path);
             cout << result << " : " << matyasFunction(result) << endl;
         }
     }
